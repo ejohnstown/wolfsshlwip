@@ -12,7 +12,13 @@ CRYPTDIR = $(WOLFSSL)/wolfcrypt/src
 CRYPTINC = $(WOLFSSL)
 OBJCRYPT = $(OBJ)/$(WOLFSSL)
 
-CPPFLAGS ?= -I. -I$(SSHINC) -I$(CRYPTINC) -DWOLFSSL_USER_SETTINGS
+LWIP ?= lwip
+LWIPDIR = $(LWIP)/src
+LWIPINC = $(LWIPDIR)/include
+OBJLWIP = $(OBJ)/$(LWIP)
+include $(LWIPDIR)/Filelists.mk
+
+CPPFLAGS ?= -I. -I$(SSHINC) -I$(CRYPTINC) -I$(LWIPINC) -DWOLFSSL_USER_SETTINGS
 ifeq ($(BUILD),debug)
     DEBUG ?= -O0 -g -DDEBUG_WOLFSSH
 endif
@@ -36,7 +42,7 @@ libwolfssh.a: $(OBJSSH)/agent.o $(OBJSSH)/keygen.o $(OBJSSH)/port.o \
   $(OBJCRYPT)/random.o $(OBJCRYPT)/hmac.o $(OBJCRYPT)/wolfmath.o \
   $(OBJCRYPT)/asn.o $(OBJCRYPT)/coding.o $(OBJCRYPT)/signature.o \
   $(OBJCRYPT)/wc_port.o $(OBJCRYPT)/sp_int.o $(OBJCRYPT)/sp_c64.o \
-  $(OBJCRYPT)/sp_c32.o
+  $(OBJCRYPT)/sp_c32.o $(OBJLWIP)/init.o $(OBJLWIP)/netif.o
 	$(AR) $(ARFLAGS) $@ $^
 
 $(OBJSSH)/%.o: $(SSHDIR)/%.c
@@ -78,6 +84,12 @@ $(OBJCRYPT)/coding.o: $(CRYPTDIR)/coding.c
 $(OBJCRYPT)/signature.o: $(CRYPTDIR)/signature.c
 $(OBJCRYPT)/wc_port.o: $(CRYPTDIR)/wc_port.c
 
+$(OBJLWIP)/%.o: $(LWIPDIR)/core/%.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+$(OBJLWIP)/init.o: $(LWIPDIR)/core/init.c
+$(OBJLWIP)/netif.o: $(LWIPDIR)/core/netif.c
+
 $(OBJ)/testsuite.o: $(WOLFSSH)/tests/testsuite.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
@@ -93,7 +105,7 @@ keys/server-key-rsa.der:
 	@cp $(WOLFSSH)/keys/server-key-rsa.pem keys
 
 $(OBJ):
-	@$(MKDIR) -p $(OBJSSH) $(OBJCRYPT)
+	@$(MKDIR) -p $(OBJSSH) $(OBJCRYPT) $(OBJLWIP)
 
 clean:
 	rm -rf libwolfssh.a testsuite $(OBJ)
