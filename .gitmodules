@@ -4,9 +4,6 @@
 [submodule "wolfssh"]
 	path = wolfssh
 	url = https://github.com/wolfSSL/wolfssh.git
-[submodule "lwip"]
-	path = lwip
-	url = https://git.savannah.gnu.org/git/lwip.git
 [submodule "lwip-linux"]
 	path = lwip-linux
 	url = git@github.com:ejohnstown/lwip-linux
