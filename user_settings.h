@@ -38,5 +38,4 @@
 #define HAVE_WC_ECC_SET_RNG
 #define NO_MAIN_DRIVER
 
-#define WOLFSSL_LWIP
 #define WOLFSSH_LWIP

@@ -59,7 +59,8 @@ LWIPOBJS= \
   $(OBJLWIP)/core/ipv6/inet6.o $(OBJLWIP)/core/ipv6/ip6.o \
   $(OBJLWIP)/core/ipv6/ip6_addr.o $(OBJLWIP)/core/ipv6/ip6_frag.o \
   $(OBJLWIP)/core/ipv6/mld6.o $(OBJLWIP)/core/ipv6/nd6.o \
-  $(OBJLWIP)/arch/if.o $(OBJLWIP)/arch/netif.o
+  $(OBJLWIP)/arch/if.o $(OBJLWIP)/arch/netif.o \
+  $(OBJLWIP)/netif/ethernet.o
 
 INCDIRS = -I. $(SSHINC) $(CRYPTINC) $(LWIPINC)
 OBJ = obj
